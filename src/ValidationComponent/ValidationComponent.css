@@ -1,0 +1,11 @@
+.validation-wrap {
+    color: green;
+    font-size: 10px;
+}
+.error {
+    color: red;
+}
+p {
+    padding: 0;
+    margin: 0;
+}

@@ -1,8 +1,43 @@
 import React, { Component } from 'react';
 import './App.css';
+import ValidationComponent from "./ValidationComponent/ValidationComponent";
+import './ValidationComponent/ValidationComponent.css';
+import CharComponent from './CharComponent/CharComponent';
+import './CharComponent/CharComponent.css';
 
 class App extends Component {
+  state = {
+    inputValue: '',
+    inputLength: 0,
+  };
+  changedInputHandler = (event) => {
+    this.setState({
+      inputValue: event.target.value,
+      inputLength: event.target.value.length
+    })
+  };
+  deleteCharHandler = (event, charIndex) => {
+    const chartsArray = this.state.inputValue.split('');
+    chartsArray.splice(charIndex, 1)
+    const chartsString = chartsArray.join('');
+    this.setState({
+      inputValue: chartsString,
+      inputLength: chartsString.length
+    })
+  }
   render() {
+    const chars = (
+      <div className="chars-wrap">{
+        this.state.inputValue.split('').map((char, index) => {
+          return <CharComponent
+            key={index}
+            charSymbol={char}
+            deleteMe={(event) => this.deleteCharHandler(event, index)}
+          />
+        })
+      }
+      </div>
+    );
     return (
       <div className="App">
         <ol>
@@ -14,6 +49,15 @@ class App extends Component {
           <li>When you click a CharComponent, it should be removed from the entered text.</li>
         </ol>
         <p>Hint: Keep in mind that JavaScript strings are basically arrays!</p>
+        <div className="container">
+          <input type="text"
+                 className={this.state.inputLength < 5 ? 'error': ''}
+                 value={this.state.inputValue}
+                 onChange={this.changedInputHandler}/>
+          <ValidationComponent textLength={this.state.inputLength}/>
+          <p className="title">Chars you entered:</p>
+          {chars}
+        </div>
       </div>
     );
   }
